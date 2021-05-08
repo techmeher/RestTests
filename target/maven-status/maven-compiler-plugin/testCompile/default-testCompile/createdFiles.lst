@@ -1,1 +1,2 @@
-RestGetTests.class
+api_tests\RestPatchAndPostTests.class
+api_tests\RestGetTests.class
