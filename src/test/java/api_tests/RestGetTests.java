@@ -29,14 +29,14 @@ public class RestGetTests {
 
     @Test(testName = "BDD Style")
     public void TestTwoBddStyle() throws URISyntaxException {
-        URI _restCountriesBaseURL = new URI("https://restcountries.eu/rest/v2/all");
-        //BDD style
+        URI _restCountriesBaseURL = new URI("https://restcountries.eu/rest/v2/name/india");
+        //BDD style with assertions and logging
         given().
                 get(_restCountriesBaseURL)
                 .then()
                 .statusCode(200)
-                .body("[0].name", equalTo("Afghanistan"));
-
-        System.out.println("Rest countries response :: " + get(_restCountriesBaseURL).getBody().asString());
+                .body("[0].name", equalTo("British Indian Ocean Territory"))
+                .body("name",hasItem("India"))
+                .log().all(); //printing output to console including response headers and body
     }
 }
