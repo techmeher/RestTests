@@ -84,16 +84,17 @@ public class RestAuthenticationTests {
 
     }
 
-    @Test(testName = "Bearer Authentication Test")
+    @Test(testName = "Bearer Authentication Test End to End Test")
     public void BearerAuthenticationTest() {
         baseURI = "https://bookstore.toolsqa.com";
         String userCreateURI = "/Account/v1/User";
         String generateTokenURI = "/Account/v1/GenerateToken";
         String addBookURI = "/BookStore/v1/Books";
         String getUserDetailsURI = "/Account/v1/User/{UUID}";
+        String deleteUserURI = "/Account/v1/User/{UUID}";
 
         Map<String, String> _userCredentials = new HashMap<>();
-        _userCredentials.put("userName", "Meher106");
+        _userCredentials.put("userName", "Meher109");
         _userCredentials.put("password", "Jaibaba01!");
 
         Gson _user = new Gson();
@@ -157,7 +158,19 @@ public class RestAuthenticationTests {
 
         System.out.println("Updated User Details " + _updatedUser);
 
-        //use put request to update existing book
+/*
+        //user deletion
+
+        Response _userDeletionResponse =
+                given()
+                        .header("Authorization", "Bearer " + _generateTokenMessage.token)
+                        .pathParam("UUID", _userBody.userID)
+                        .delete(deleteUserURI);
+
+        MessageDto _deleteMessageDto = _userDeletionResponse.as(MessageDto.class);
+
+        System.out.println("User Deletion Message " + _deleteMessageDto);
+*/
 
     }
 }
