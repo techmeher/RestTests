@@ -1,14 +1,18 @@
 package api_tests;
 
+import dtos.Book;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import static io.restassured.RestAssured.get;
-import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.*;
 import static io.restassured.matcher.RestAssuredMatchers.*;
 import static org.hamcrest.Matchers.*;
 
@@ -17,6 +21,7 @@ public class RestGetTests {
 
     //https://restcountries.eu/#api-endpoints-all
     //https://reqres.in/api/users/2
+    //https://bookstore.toolsqa.com/swagger/#/
 
     @Test(testName = "Traditional Style")
     public void TestOneTraditionalStyle() throws URISyntaxException {
@@ -36,7 +41,28 @@ public class RestGetTests {
                 .then()
                 .statusCode(200)
                 .body("[0].name", equalTo("British Indian Ocean Territory"))
-                .body("name",hasItem("India"))
+                .body("name", hasItem("India"))
                 .log().all(); //printing output to console including response headers and body
+    }
+
+    @Test(testName = "Test Pojos in Get request")
+    public void TestGetToPOJOs() {
+        baseURI = "https://bookstore.toolsqa.com";
+
+
+        JsonPath jsonPath =
+                when()
+                        .get("/BookStore/v1/Books")
+                        .then()
+                        .assertThat()
+                        .statusCode(200)
+                        .assertThat()
+                        .extract().body().jsonPath();
+
+        List<Book> _books = jsonPath.getList("books", Book.class);
+
+        System.out.println("List size of retrieved Books :: " + _books.size());
+
+        _books.stream().forEach(System.out::println);
     }
 }
